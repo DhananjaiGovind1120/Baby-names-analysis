@@ -27,7 +27,7 @@ def fetch_services():
     response.raise_for_status()
 
     try:
-        return response.json()["data"]
+        return response.json()["entities"]  # Updated to match the actual API response
     except KeyError:
         raise ValueError(f"Unexpected response format while fetching services: {response.json()}")
 
@@ -40,7 +40,7 @@ def fetch_related_frameworks(service_identifier):
     response.raise_for_status()
 
     try:
-        return response.json()["data"]
+        return response.json()["entities"]  # Updated to match the actual API response
     except KeyError:
         raise ValueError(f"Unexpected response format while fetching frameworks for service '{service_identifier}': {response.json()}")
 
@@ -48,7 +48,7 @@ def fetch_related_frameworks(service_identifier):
 def update_service_eol_count(service_identifier, eol_count):
     url = f"{PORT_API_URL}/blueprints/service/entities/{service_identifier}/properties"
     payload = {
-        "eol_package_count": eol_count
+        "eol_count": eol_count  # Make sure this matches the property identifier in your blueprint
     }
     response = requests.patch(url, json=payload, headers=HEADERS)
     print(f"Updating service '{service_identifier}': Status Code {response.status_code}")
