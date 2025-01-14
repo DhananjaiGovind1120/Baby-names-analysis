@@ -33,7 +33,7 @@ def fetch_services():
 
 # Fetch related frameworks for a service
 def fetch_related_frameworks(service_identifier):
-    url = f"{PORT_API_URL}/blueprints/service/entities/{service_identifier}/relations/usedFrameworks"
+    url = f"{PORT_API_URL}/blueprints/service/entities/{service_identifier}/relations/used_frameworks"
     response = requests.get(url, headers=HEADERS)
     print(f"Fetching frameworks for service '{service_identifier}': Status Code {response.status_code}")
     print(f"Response: {response.text}")
