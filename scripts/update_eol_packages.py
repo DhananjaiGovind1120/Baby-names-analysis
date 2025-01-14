@@ -1,10 +1,19 @@
 import requests
+import os
 
 # Port API Configuration
 PORT_API_URL = "https://api.getport.io/v1"
-PORT_API_TOKEN = "YOUR_API_KEY"  # Replace this with your Port API key
+PORT_API_TOKEN = os.environ.get("PORT_API_TOKEN")  # Fetch the token from the environment variable
+
+if not PORT_API_TOKEN:
+    raise ValueError("PORT_API_TOKEN environment variable is not set!")
+
+# Ensure the token includes "Bearer" prefix
+if not PORT_API_TOKEN.startswith("Bearer "):
+    PORT_API_TOKEN = f"Bearer {PORT_API_TOKEN}"
+
 HEADERS = {
-    "Authorization": f"Bearer {PORT_API_TOKEN}",
+    "Authorization": PORT_API_TOKEN,
     "Content-Type": "application/json"
 }
 
