@@ -3,7 +3,7 @@ import os
 
 # Port API Configuration
 PORT_API_URL = "https://api.getport.io/v1"
-PORT_API_TOKEN = os.environ.get("PORT_API_TOKEN")  # Fetch the token from the environment variable
+PORT_API_TOKEN = os.environ.get("PORT_API_TOKEN") 
 
 # Validate API token
 if not PORT_API_TOKEN:
@@ -27,7 +27,7 @@ def fetch_services():
     response.raise_for_status()
 
     try:
-        return response.json()["entities"]  # Updated to match the actual API response
+        return response.json()["entities"]  
     except KeyError:
         raise ValueError(f"Unexpected response format while fetching services: {response.json()}")
 
@@ -40,7 +40,7 @@ def fetch_related_frameworks(service_identifier):
     response.raise_for_status()
 
     try:
-        return response.json()["entities"]  # Updated to match the actual API response
+        return response.json()["entities"]  
     except KeyError:
         raise ValueError(f"Unexpected response format while fetching frameworks for service '{service_identifier}': {response.json()}")
 
@@ -48,7 +48,7 @@ def fetch_related_frameworks(service_identifier):
 def update_service_eol_count(service_identifier, eol_count):
     url = f"{PORT_API_URL}/blueprints/service/entities/{service_identifier}/properties"
     payload = {
-        "eol_count": eol_count  # Make sure this matches the property identifier in your blueprint
+        "eol_count": eol_count  
     }
     response = requests.patch(url, json=payload, headers=HEADERS)
     print(f"Updating service '{service_identifier}': Status Code {response.status_code}")
