@@ -31,22 +31,22 @@ def fetch_services():
     except KeyError:
         raise ValueError(f"Unexpected response format while fetching services: {response.json()}")
 
-import urllib.parse
-
 def fetch_related_frameworks(service_identifier):
+    import urllib.parse
+
     # Encode service identifier to handle special characters
     encoded_identifier = urllib.parse.quote(service_identifier)
 
-    # Construct the base URL for fetching the service entity
+    # Construct the correct URL for fetching the service entity
     url = f"{PORT_API_URL}/blueprints/service/entities/{encoded_identifier}"
 
-    # Debug: Log the constructed URL
+    # Debug: Print the constructed URL
     print(f"Constructed URL: {url}")
 
     # Make the API request
     response = requests.get(url, headers=HEADERS)
 
-    # Debug: Log the status code and response
+    # Debug: Print the status code and response
     print(f"Fetching service '{service_identifier}': Status Code {response.status_code}")
     print(f"Response: {response.text}")
 
@@ -55,9 +55,10 @@ def fetch_related_frameworks(service_identifier):
 
     # Parse the response and extract the 'used_frameworks' relation
     try:
-        return response.json()["relations"]["used_frameworks"]
+        return response.json()["entity"]["relations"]["used_frameworks"]
     except KeyError:
-        raise ValueError(f"Unexpected response format: {response.json()}")
+        raise ValueError(f"Unexpected response format while fetching frameworks for service '{service_identifier}': {response.json()}")
+
 
 # Update the EOL package count for a service
 def update_service_eol_count(service_identifier, eol_count):
