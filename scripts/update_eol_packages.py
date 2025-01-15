@@ -81,7 +81,7 @@ def fetch_framework_details(framework_identifier):
 # Update the EOL package count for a service
 def update_service_eol_count(service_identifier, eol_count):
     # Construct the correct URL
-    url = f"{PORT_API_URL}/blueprints/service/entities/{service_identifier}/properties"
+    url = f"{PORT_API_URL}/blueprints/service/entities/{service_identifier}"
     
     # Payload for updating the property
     payload = {
