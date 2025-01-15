@@ -48,7 +48,9 @@ def fetch_related_frameworks(service_identifier):
 def update_service_eol_count(service_identifier, eol_count):
     url = f"{PORT_API_URL}/blueprints/service/entities/{service_identifier}/properties"
     payload = {
-        "eol_count": eol_count  
+        "properties": {  # Added the 'properties' key
+            "eol_count": eol_count  # Nested the 'eol_count' inside 'properties'
+        }
     }
     response = requests.patch(url, json=payload, headers=HEADERS)
     print(f"Updating service '{service_identifier}': Status Code {response.status_code}")
