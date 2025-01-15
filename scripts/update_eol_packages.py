@@ -1,9 +1,10 @@
 import requests
 import os
+import urllib.parse
 
 # Port API Configuration
 PORT_API_URL = "https://api.getport.io/v1"
-PORT_API_TOKEN = os.environ.get("PORT_API_TOKEN") 
+PORT_API_TOKEN = os.environ.get("PORT_API_TOKEN")
 
 # Validate API token
 if not PORT_API_TOKEN:
@@ -27,13 +28,12 @@ def fetch_services():
     response.raise_for_status()
 
     try:
-        return response.json()["entities"]  
+        return response.json()["entities"]
     except KeyError:
         raise ValueError(f"Unexpected response format while fetching services: {response.json()}")
 
+# Fetch related frameworks for a service
 def fetch_related_frameworks(service_identifier):
-    import urllib.parse
-
     # Encode service identifier to handle special characters
     encoded_identifier = urllib.parse.quote(service_identifier)
 
@@ -59,13 +59,31 @@ def fetch_related_frameworks(service_identifier):
     except KeyError:
         raise ValueError(f"Unexpected response format while fetching frameworks for service '{service_identifier}': {response.json()}")
 
+# Fetch framework details
+def fetch_framework_details(framework_identifier):
+    # Construct the URL for the framework entity
+    url = f"{PORT_API_URL}/blueprints/framework/entities/{framework_identifier}"
+    response = requests.get(url, headers=HEADERS)
+
+    # Debug: Print the response status and content
+    print(f"Fetching details for framework '{framework_identifier}': Status Code {response.status_code}")
+    print(f"Response: {response.text}")
+
+    # Raise an error for non-successful status codes
+    response.raise_for_status()
+
+    # Parse the framework details
+    try:
+        return response.json()["entity"]
+    except KeyError:
+        raise ValueError(f"Unexpected response format for framework '{framework_identifier}': {response.json()}")
 
 # Update the EOL package count for a service
 def update_service_eol_count(service_identifier, eol_count):
     url = f"{PORT_API_URL}/blueprints/service/entities/{service_identifier}/properties"
     payload = {
-        "properties": {  # Added the 'properties' key
-            "eol_count": eol_count  # Nested the 'eol_count' inside 'properties'
+        "properties": {
+            "eol_count": eol_count
         }
     }
     response = requests.patch(url, json=payload, headers=HEADERS)
@@ -87,10 +105,14 @@ def main():
                 continue
 
             # Fetch related frameworks
-            frameworks = fetch_related_frameworks(service_identifier)
+            framework_ids = fetch_related_frameworks(service_identifier)
 
             # Count EOL frameworks
-            eol_count = sum(1 for fw in frameworks if fw["properties"].get("state") == "EOL")
+            eol_count = 0
+            for fw_id in framework_ids:
+                framework_details = fetch_framework_details(fw_id)
+                if framework_details["properties"].get("state") == "EOL":
+                    eol_count += 1
 
             # Update the service entity with the EOL count
             update_service_eol_count(service_identifier, eol_count)
