@@ -80,16 +80,24 @@ def fetch_framework_details(framework_identifier):
 
 # Update the EOL package count for a service
 def update_service_eol_count(service_identifier, eol_count):
-    url = f"{PORT_API_URL}/blueprints/service/entities/{service_identifier}/properties"
+    # Construct the correct URL
+    url = f"{PORT_API_URL}/blueprints/service/entities/{service_identifier}/properties/eol_count"
+    
+    # Payload for updating the property
     payload = {
-        "properties": {
-            "eol_count": eol_count
-        }
+        "value": eol_count
     }
+    
+    # Make the PATCH request
     response = requests.patch(url, json=payload, headers=HEADERS)
+    
+    # Debugging logs
     print(f"Updating service '{service_identifier}': Status Code {response.status_code}")
     print(f"Response: {response.text}")
+    
+    # Raise an error for non-successful status codes
     response.raise_for_status()
+    
     print(f"Successfully updated {service_identifier} with {eol_count} EOL frameworks.")
 
 # Main logic
