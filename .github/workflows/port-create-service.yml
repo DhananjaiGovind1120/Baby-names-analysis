@@ -20,7 +20,7 @@ jobs:
   scaffold-service:
     runs-on: ubuntu-latest
     env:
-      ORG_NAME: <Your ORG name>
+      ORG_NAME: DhananjaiGovind1120
       PORT_RUN_ID: ${{ fromJson(inputs.port_context).runId }}
 
     steps:
@@ -46,10 +46,11 @@ jobs:
           repositoryName: ${{ inputs.service_name }}
           portUserInputs: '{"cookiecutter_app_name": "${{ inputs.service_name }}" }'
           cookiecutterTemplate: https://github.com/lacion/cookiecutter-golang
-          blueprintIdentifier: "githubRepository"
+          blueprintIdentifier: "service"  # Ensure this is correct
           organizationName: ${{ env.ORG_NAME }}
 
-
+      - name: Wait for Repository to be Available in Port
+        run: sleep 10
 
       - name: Create Service in Port with Repository Relation
         uses: port-labs/port-github-action@v1
@@ -60,7 +61,7 @@ jobs:
           operation: UPSERT
           identifier: "${{ inputs.service_name }}_service"
           title: "${{ inputs.service_name }} Service"
-          blueprint: "service"
+          blueprint: "service"  # Ensuring we use the correct blueprint
           relations: |
             {
               "repository": "${{ inputs.service_name }}"
