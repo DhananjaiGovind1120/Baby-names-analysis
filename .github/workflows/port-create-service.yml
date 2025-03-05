@@ -50,7 +50,7 @@ jobs:
           organizationName: ${{ env.ORG_NAME }}
 
       - name: Wait for Repository to be Available in Port
-        run: sleep 10
+        run: sleep 30
 
       - name: Create Service in Port with Repository Relation
         uses: port-labs/port-github-action@v1
