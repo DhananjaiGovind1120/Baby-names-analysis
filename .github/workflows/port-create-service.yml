@@ -46,11 +46,9 @@ jobs:
           repositoryName: ${{ inputs.service_name }}
           portUserInputs: '{"cookiecutter_app_name": "${{ inputs.service_name }}" }'
           cookiecutterTemplate: https://github.com/lacion/cookiecutter-golang
-          blueprintIdentifier: "service"  # Ensure this is correct
+          blueprintIdentifier: "service"
           organizationName: ${{ env.ORG_NAME }}
 
-      - name: Wait for Repository to be Available in Port
-        run: sleep 10
 
       - name: Create Service in Port with Repository Relation
         uses: port-labs/port-github-action@v1
@@ -61,7 +59,7 @@ jobs:
           operation: UPSERT
           identifier: "${{ inputs.service_name }}_service"
           title: "${{ inputs.service_name }} Service"
-          blueprint: "service"  # Ensuring we use the correct blueprint
+          blueprint: "service"
           relations: |
             {
               "repository": "${{ inputs.service_name }}"
