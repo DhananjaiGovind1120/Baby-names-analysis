@@ -20,7 +20,7 @@ jobs:
   scaffold-service:
     runs-on: ubuntu-latest
     env:
-      ORG_NAME: DhananjaiGovind1120
+      ORG_NAME: <Your ORG name>
       PORT_RUN_ID: ${{ fromJson(inputs.port_context).runId }}
 
     steps:
@@ -49,19 +49,7 @@ jobs:
           blueprintIdentifier: "githubRepository"
           organizationName: ${{ env.ORG_NAME }}
 
-      - name: Register Repository in Port
-        uses: port-labs/port-github-action@v1
-        with:
-          clientId: ${{ secrets.PORT_CLIENT_ID }}
-          clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
-          baseUrl: https://api.getport.io
-          operation: UPSERT
-          identifier: "${{ inputs.service_name }}"
-          title: "${{ inputs.service_name }} Repository"
-          blueprint: "githubRepository"
 
-      - name: Wait for Repository to be Available in Port
-        run: sleep 10
 
       - name: Create Service in Port with Repository Relation
         uses: port-labs/port-github-action@v1
