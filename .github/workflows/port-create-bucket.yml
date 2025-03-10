@@ -31,8 +31,8 @@ jobs:
           cp templates/cloudResource.tf "./targetRepo/resources/${{ inputs.name }}.tf"
       - name: Update new file data
         run: |
-          sed -i 's/{{ bucket_name }}/${{ inputs.name }}/' ./targetRepo/resources/${{ inputs.name }}.tf
-          sed -i 's/{{ bucket_acl }}/${{ inputs.visibility }}/' ./targetRepo/resources/${{ inputs.name }}.tf
+          sed -i 's/{{ bucket_name }}/${{ inputs.name }}/' "./targetRepo/resources/${{ inputs.name }}.tf"
+          sed -i 's/{{ bucket_acl }}/${{ inputs.visibility }}/' "./targetRepo/resources/${{ inputs.name }}.tf"
       - name: Open a pull request
         uses: peter-evans/create-pull-request@v5
         with:
