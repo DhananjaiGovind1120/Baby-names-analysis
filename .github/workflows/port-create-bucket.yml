@@ -56,7 +56,7 @@ jobs:
         uses: port-labs/port-github-action@v1
         with:
           identifier: ${{ fromJson(inputs.port_context).entity }}
-          blueprint: githubRepository
+          blueprint: service
           properties: |-
             {
               "resource_definitions": "${{ github.server_url }}/${{ github.repository_owner }}/${{ fromJson(inputs.port_context).entity }}/blob/main/resources/"
