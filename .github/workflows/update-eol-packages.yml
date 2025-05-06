@@ -1,0 +1,27 @@
+name: Update EOL Packages
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
+  workflow_dispatch:  # Allow manual execution
+
+jobs:
+  update-eol:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Update Script
+        env:
+          PORT_API_TOKEN: ${{ secrets.PORT_API_TOKEN }}
+        run: python scripts/update_eol_packages.py
